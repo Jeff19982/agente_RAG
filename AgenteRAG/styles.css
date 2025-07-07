@@ -1,0 +1,497 @@
+@import url('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css');
+
+/*
+ * Estilos Personalizados para el Chat de n8n
+ * Basado en los colores de la Escuela Superior Politécnica de Chimborazo (ESPOCH)
+ * Autor: Asistente Gemini
+ * Fecha: 07 de Julio de 2025
+ */
+
+:root {
+	/* Variables de Colores ESPOCH */
+	/* Estos son los colores base inspirados en la Escuela Superior Politécnica de Chimborazo. */
+	--espocht--color-blue-dark: #003366; /* Azul oscuro principal de la ESPOCH */
+	--espocht--color-blue-light: #0050A0; /* Un azul ligeramente más claro para contrastes */
+	--espocht--color-red: #CC0000; /* Rojo vibrante de la ESPOCH */
+	--espocht--color-red-dark: #A30000; /* Rojo más oscuro para estados hover/active */
+	--espocht--color-white: #ffffff; /* Blanco puro */
+	--espocht--color-light-gray: #f2f4f8; /* Gris muy claro para fondos generales */
+	--espocht--color-medium-gray: #d2d4d9; /* Gris medio para bordes o separadores */
+	--espocht--color-dark-text: #333333; /* Gris oscuro para texto principal */
+	--espocht--color-disabled: #777980; /* Color para elementos deshabilitados */
+
+	/* Espaciado y Estilos Generales del Chat */
+	--chat--spacing: 1rem; /* Espaciado base uniforme */
+	--chat--border-radius: 0.5rem; /* Bordes más redondeados para un aspecto moderno y suave */
+	--chat--transition-duration: 0.2s; /* Duración de las transiciones ligeramente más larga para mayor suavidad */
+	--chat--font-family: 'Arial', sans-serif; /* Fuente general para el chat */
+
+	/* Dimensiones y Estilo de la Ventana del Chat */
+	--chat--window--width: 300px; /* Ancho de la ventana del chat (más angosto) */
+	--chat--window--height: 500px; /* Alto de la ventana del chat */
+	--chat--window--background: var(--espocht--color-light-gray); /* Fondo general de la ventana del chat */
+	--chat--window--border: 1px solid var(--espocht--color-medium-gray); /* Borde sutil para la ventana del chat */
+	--chat--window--box-shadow: 0 4px 12px rgba(87, 37, 37, 0.15); /* Sombra sutil para la ventana */
+
+	/* Detalles del Encabezado (Header) de la ESPOCH */
+	/* Ajustes para asegurar que el encabezado y su texto sean completamente visibles, sin recortes. */
+	--chat--header-height: auto; /* La altura se ajusta automáticamente al contenido. */
+	--chat--header--padding: 0.8rem var(--chat--spacing); /* Relleno para espacio alrededor del texto. */
+	--chat--header--background: var(--espocht--color-blue-dark); /* Fondo azul oscuro de la ESPOCH. */
+	--chat--header--color: var(--espocht--color-white); /* Color de texto blanco para el encabezado. */
+	--chat--header--border-top: 1px solid var(--espocht--color-red); /* Borde superior rojo vibrante para la franja. */
+	--chat--header--border-bottom: 2px solid var(--espocht--color-red); /* Borde inferior rojo vibrante para la franja. */
+	--chat--header--display: flex; /* Usar flexbox para organizar el contenido. */
+	--chat--header--align-items: center; /* Alineación vertical al centro de los ítems del flex container. */
+	--chat--header--justify-content: center; /* Centrar contenido horizontalmente (si es un solo bloque de texto). */
+	--chat--header--text-align: center; /* Centrar texto dentro del bloque. */
+	--chat--header--flex-direction: column; /* Apilar el título y subtítulo verticalmente. */
+
+
+	/* Estilos del Título y Subtítulo del Encabezado */
+--chat--heading--font-size: 0.50em; /* **AJUSTE:** Tamaño de fuente del título, reducido ligeramente */
+--chat--heading--font-weight: bold; /* Título en negrita. */
+--chat--subtitle--font-size: 0.35em; /* **AJUSTE:** Tamaño de fuente reducido para el subtítulo para un mejor ajuste. */
+--chat--subtitle--line-height: 0.30; /* **AJUSTE:** Altura de línea reducida para el subtítulo para compactar más el texto. */
+--chat--subtitle--margin-top: 0.005rem; /* Pequeño margen entre título y subtítulo, ligeramente reducido. */
+
+
+	/* Altura y Estilo del Área de Texto para Escribir Mensajes */
+	--chat--textarea--height: 45px; /* Altura del área de texto, más compacta. */
+	--chat--textarea--background: var(--espocht--color-white); /* Fondo blanco para el área de texto. */
+	--chat--textarea--border: 1px solid var(--espocht--color-medium-gray); /* Borde para el área de texto. */
+	--chat--textarea--border-radius: var(--chat--border-radius); /* Bordes redondeados. */
+	--chat--textarea--padding: 0.6rem 0.75rem; /* Relleno del textarea. */
+	--chat--textarea--color: var(--espocht--color-dark-text); /* Color del texto a escribir. */
+
+	/* Contenedor del Área de Entrada (Input y Botón de Envío) */
+	/* Estas variables se aplicarán al contenedor que agrupa el input y el botón de enviar.
+	   Asegúrate de que tu HTML tenga un div que los contenga, por ejemplo, class="chat-input-area-wrapper" */
+	--chat--input-area--padding: var(--chat--spacing); /* Padding alrededor del área de entrada. */
+	--chat--input-area--display: flex; /* Usar flexbox para alinear el input y el botón de enviar. */
+	--chat--input-area--gap: 0.5rem; /* Espacio entre el input y el botón. */
+	--chat--input-area--align-items: flex-end; /* Alinea los elementos al final (inferior) si tienen alturas diferentes. */
+
+
+	/* Estilos de los Mensajes del Chat */
+	--chat--message--font-size: 0.95rem; /* Tamaño de fuente de los mensajes. */
+	--chat--message--padding: 0.75rem 1rem; /* Relleno de los globos de mensaje. */
+	--chat--message--border-radius: var(--chat--border-radius); /* Bordes redondeados para los globos. */
+	--chat--message-line-height: 1.6; /* Altura de línea para una buena legibilidad. */
+
+	/* Contenedor Principal de los Mensajes (donde se hace scroll) */
+	/* Esto debe aplicarse al contenedor que envuelve *todos* los mensajes individuales. */
+	--chat--messages-container--padding: var(--chat--spacing); /* Relleno para el contenedor principal de los mensajes. */
+	--chat--messages-container--overflow-y: auto; /* Permite el scroll cuando los mensajes exceden el alto. */
+	--chat--messages-container--gap: 0.75rem; /* Espacio entre los mensajes individuales. */
+	--chat--messages-container--display: flex; /* Usar flexbox para los mensajes. */
+	--chat--messages-container--flex-direction: column; /* Apilar mensajes verticalmente. */
+	--chat--messages-container--flex-grow: 1; /* Permite que este contenedor ocupe el espacio disponible. */
+
+
+	/* Mensajes del Bot (ESPOCH Azul) */
+	--chat--message--bot--background: var(--espocht--color-blue-light); /* Fondo azul claro de la ESPOCH. */
+	--chat--message--bot--color: var(--espocht--color-white); /* Color de texto blanco. */
+	--chat--message--bot--border: none;
+	--chat--message--bot--align-self: flex-start; /* Alinear mensajes del bot a la izquierda. */
+	--chat--message--bot--max-width: 80%; /* Limitar ancho para que no ocupen todo el espacio. */
+	--chat--message--bot--border-bottom-left-radius: 0; /* Quitar redondeo de la esquina inferior izquierda. */
+
+
+	/* Mensajes del Usuario (ESPOCH Rojo) */
+	--chat--message--user--background: var(--espocht--color-red); /* Fondo rojo. */
+	--chat--message--user--color: var(--espocht--color-white); /* Color de texto blanco. */
+	--chat--message--user--border: none;
+	--chat--message--user--align-self: flex-end; /* Alinear mensajes del usuario a la derecha. */
+	--chat--message--user--max-width: 80%; /* Limitar ancho. */
+	--chat--message--user--border-bottom-right-radius: 0; /* Quitar redondeo de la esquina inferior derecha. */
+
+
+	/* Estilos para bloques de código o preformateados dentro de mensajes */
+	--chat--message--pre--background: rgba(0, 0, 0, 0.05); /* Fondo gris transparente. */
+	--chat--message--pre--color: var(--espocht--color-dark-text); /* Color de texto oscuro. */
+	--chat--message--pre--border-radius: 0.3rem; /* Bordes redondeados. */
+	--chat--message--pre--padding: 0.5rem; /* Relleno. */
+
+	/* Estilos del Botón de Alternar (Toggle Button) */
+	/* Este botón generalmente se posiciona fijo en la esquina inferior derecha. */
+	--chat--toggle--background: var(--espocht--color-blue-dark); /* Fondo azul oscuro. */
+	--chat--toggle--hover--background: var(--espocht--color-blue-light); /* Azul más claro al pasar el ratón. */
+	--chat--toggle--active--background: var(--espocht--color-blue-dark); /* Azul oscuro al hacer clic. */
+	--chat--toggle--color: var(--espocht--color-white); /* Color de texto/icono blanco. */
+	--chat--toggle--size: 60px; /* Tamaño del botón. */
+	--chat--toggle--border-radius: 50%; /* Botón completamente redondo. */
+	--chat--toggle--box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombra para el botón. */
+}
+
+/* Reglas CSS específicas para los elementos inyectados por n8n/chat */
+/* Estas reglas usan los selectores que n8n/chat probablemente genera.
+   Es crucial que estas reglas sobrescriban los estilos predeterminados. */
+
+/* Estilo para la ventana principal del chat */
+.n8n-chat-window {
+    width: var(--chat--window--width) !important;
+    height: var(--chat--window--height) !important;
+    background: var(--chat--window--background) !important;
+    border: var(--chat--window--border) !important;
+    border-radius: var(--chat--border-radius) !important;
+    box-shadow: var(--chat--window--box-shadow) !important;
+    font-family: var(--chat--font-family) !important;
+    display: flex; /* **Importante para el layout interno** */
+    flex-direction: column; /* **Importante para apilar header, messages, input** */
+}
+
+/* Estilo para el encabezado del chat */
+.n8n-chat-header {
+    height: var(--chat--header-height) !important;
+    padding: var(--chat--header--padding) !important;
+    background: var(--chat--header--background) !important;
+    color: var(--chat--header--color) !important;
+    border-top: var(--chat--header--border-top) !important;
+    border-bottom: var(--chat--header--border-bottom) !important;
+    display: var(--chat--header--display) !important;
+    align-items: var(--chat--header--align-items) !important;
+    justify-content: var(--chat--header--justify-content) !important;
+    text-align: var(--chat--header--text-align) !important;
+    flex-direction: var(--chat--header--flex-direction) !important;
+    box-sizing: border-box; /* Asegura que padding y border se incluyan en el height */
+}
+
+/* Estilo para el título en el encabezado */
+.n8n-chat-header__title {
+    font-size: var(--chat--heading--font-size) !important;
+    font-weight: var(--chat--heading--font-weight) !important;
+    line-height: 1.2 !important; /* Ajuste para títulos de una línea */
+}
+
+/* Estilo para el subtítulo en el encabezado */
+.n8n-chat-header__subtitle {
+    font-size: var(--chat--subtitle--font-size) !important;
+    line-height: var(--chat--subtitle--line-height) !important;
+    margin-top: var(--chat--subtitle--margin-top) !important;
+    max-width: 95%; /* Evita que el subtítulo se desborde si es muy largo */
+    word-wrap: break-word; /* Permite que palabras largas se rompan y ajusten */
+}
+
+/* Estilo para el contenedor de mensajes */
+.n8n-chat-messages {
+    flex-grow: var(--chat--messages-container--flex-grow) !important; /* Ocupa el espacio restante */
+    overflow-y: var(--chat--messages-container--overflow-y) !important; /* Habilita el scroll */
+    padding: var(--chat--messages-container--padding) !important;
+    display: var(--chat--messages-container--display) !important;
+    flex-direction: var(--chat--messages-container--flex-direction) !important;
+    gap: var(--chat--messages-container--gap) !important;
+    box-sizing: border-box; /* Incluye padding en el cálculo de altura */
+}
+
+/* Estilo base para cada globo de mensaje */
+.n8n-chat-message {
+    padding: var(--chat--message--padding) !important;
+    border-radius: var(--chat--message--border-radius) !important;
+    font-size: var(--chat--message--font-size) !important;
+    line-height: var(--chat--message-line-height) !important;
+    max-width: var(--chat--message--user--max-width) !important; /* Usar el max-width de usuario/bot */
+    word-wrap: break-word; /* Asegura que el texto se ajuste dentro del globo */
+}
+
+/* Estilo para mensajes del bot */
+.n8n-chat-message--bot {
+    background: var(--chat--message--bot--background) !important;
+    color: var(--chat--message--bot--color) !important;
+    align-self: var(--chat--message--bot--align-self) !important;
+    border-bottom-left-radius: var(--chat--message--bot--border-bottom-left-radius) !important;
+}
+
+/* Estilo para mensajes del usuario */
+.n8n-chat-message--user {
+    background: var(--chat--message--user--background) !important;
+    color: var(--chat--message--user--color) !important;
+    align-self: var(--chat--message--user--align-self) !important;
+    border-bottom-right-radius: var(--chat--message--user--border-bottom-right-radius) !important;
+}
+
+/* Contenedor del área de entrada (textarea y botón de envío) */
+.n8n-chat-input-area {
+    padding: var(--chat--input-area--padding) !important;
+    background: var(--espocht--color-white); /* Fondo del área de entrada */
+    border-top: 1px solid var(--espocht--color-medium-gray); /* Separador visual */
+    display: var(--chat--input-area--display) !important;
+    gap: var(--chat--input-area--gap) !important;
+    align-items: var(--chat--input-area--align-items) !important;
+    box-sizing: border-box;
+}
+
+/* Estilo para el campo de texto (textarea) */
+.n8n-chat-input-area__textarea {
+    flex-grow: 1; /* Permite que el textarea ocupe el espacio disponible */
+    height: var(--chat--textarea--height) !important;
+    padding: var(--chat--textarea--padding) !important;
+    border: var(--chat--textarea--border) !important;
+    border-radius: var(--chat--textarea--border-radius) !important;
+    background: var(--chat--textarea--background) !important;
+    color: var(--chat--textarea--color) !important;
+    resize: none; /* Deshabilita el redimensionamiento manual del textarea */
+    box-sizing: border-box; /* Incluye padding y border en la altura */
+}
+
+/* Estilo para el botón de enviar (dentro del área de input) */
+.n8n-chat-input-area__send-button {
+    background: var(--espocht--color-blue-dark) !important; /* Fondo del botón de enviar */
+    color: var(--espocht--color-white) !important; /* Color del icono/texto del botón */
+    border: none !important;
+    border-radius: var(--chat--border-radius) !important;
+    padding: 0.75rem 1rem !important; /* Relleno del botón */
+    cursor: pointer;
+    transition: background var(--chat--transition-duration);
+}
+
+.n8n-chat-input-area__send-button:hover {
+    background: var(--espocht--color-blue-light) !important;
+}
+
+/* Estilo para el botón flotante de toggle (abrir/cerrar chat) */
+.n8n-chat-toggle {
+    background: var(--chat--toggle--background) !important;
+    color: var(--chat--toggle--color) !important;
+    width: var(--chat--toggle--size) !important;
+    height: var(--chat--toggle--size) !important;
+    border-radius: var(--chat--toggle--border-radius) !important;
+    box-shadow: var(--chat--toggle--box-shadow) !important;
+    transition: background var(--chat--transition-duration) !important;
+    /* Posicionamiento fijo, ajusta si es necesario en tu body */
+    position: fixed;
+    bottom: var(--chat--spacing);
+    right: var(--chat--spacing);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+.n8n-chat-toggle:hover {
+    background: var(--chat--toggle--hover--background) !important;
+}
+
+.n8n-chat-toggle:active {
+    background: var(--chat--toggle--active--background) !important;
+}
+
+/* Ocultar el footer "Powered by n8n" si es necesario */
+/* Esto puede requerir sobrescribir estilos de n8n, si es un elemento separado */
+.n8n-chat-footer {
+    display: none !important; /* Oculta el pie de página */
+}
+
+
+
+
+
+
+:root{
+/*estilos interfaz pantalla completa */
+/* Variables CSS para colores */
+
+    --primary-color: #2e7d32; /* Un verde oscuro */
+    --secondary-color: #1b5e20; /* Un verde aún más oscuro */
+    --light-color: #ffffff; /* Blanco */
+    --dark-color: #263238; /* Gris oscuro casi negro */
+    --highlight-color: #e8f5e9; /* Verde muy claro para el fondo del chat */
+    --border-color: #cfd8dc; /* Gris azulado claro para bordes */
+    --text-color-user: #424242; /* Gris oscuro para el texto del usuario */
+    --text-color-ai: #303030; /* Gris más oscuro para el texto de la IA */
+    --bubble-user-bg: #E0F7FA; /* Azul cian muy claro para burbujas de usuario */
+    --bubble-ai-bg: #CFD8DC; /* Gris azulado claro para burbujas de IA */
+}
+
+/* Estilos Generales y Reseteo */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Evita scrolls no deseados en body */
+}
+
+/* Contenedor principal del chat */
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    width: 100%;
+    max-width: 800px; /* Ancho máximo para pantallas grandes */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que los hijos no desborden */
+}
+
+/* Encabezado del chat */
+.chat-header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 20px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--light-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+/* Contenedor del chat inyectado por n8n */
+#n8n-chat {
+    flex: 1; /* Ocupa el espacio restante */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Para que el scroll lo maneje el componente de n8n */
+    background-color: var(--highlight-color); /* Fondo del área de mensajes */
+}
+
+/* SOBREESCRITURA DE ESTILOS DEL COMPONENTE @n8n/chat */
+/* Es crucial usar !important donde sea necesario para sobreescribir los estilos inyectados por el componente */
+
+/* Contenedor principal del chat n8n */
+.n8n-chat-container {
+    height: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important; /* Elimina bordes redondeados si el componente los tiene */
+    box-shadow: none !important; /* Elimina sombras si el componente las tiene */
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Área de mensajes dentro del chat n8n */
+.n8n-chat-messages-container {
+    flex-grow: 1 !important;
+    padding: 15px !important;
+    background-color: var(--highlight-color) !important; /* Fondo de mensajes */
+    overflow-y: auto !important; /* Asegura el scroll */
+}
+
+/* Burbujas de mensaje (general) */
+.n8n-chat-message-bubble {
+    max-width: 75% !important;
+    padding: 12px 18px !important;
+    border-radius: 20px !important;
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+    font-size: 0.95em !important;
+}
+
+/* Burbujas de mensaje del usuario */
+.n8n-chat-message-bubble.user {
+    background-color: var(--bubble-user-bg) !important;
+    color: var(--text-color-user) !important;
+    align-self: flex-end !important; /* Alinear a la derecha */
+    border-bottom-right-radius: 5px !important; /* Pequeño ajuste para la "cola" */
+}
+
+/* Burbujas de mensaje del bot (IA) */
+.n8n-chat-message-bubble.bot {
+    background-color: var(--bubble-ai-bg) !important;
+    color: var(--text-color-ai) !important;
+    align-self: flex-start !important; /* Alinear a la izquierda */
+    border-bottom-left-radius: 5px !important; /* Pequeño ajuste para la "cola" */
+}
+
+/* Input y botón de envío */
+.n8n-chat-input-container {
+    padding: 15px !important;
+    border-top: 1px solid var(--border-color) !important;
+    background-color: var(--light-color) !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.n8n-chat-input-text {
+    flex-grow: 1 !important;
+    padding: 10px 15px !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 25px !important;
+    font-size: 1em !important;
+    outline: none !important;
+    transition: border-color 0.3s ease !important;
+}
+
+.n8n-chat-input-text:focus {
+    border-color: var(--primary-color) !important;
+}
+
+.n8n-chat-send-button {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 25px !important;
+    padding: 10px 20px !important;
+    margin-left: 10px !important;
+    cursor: pointer !important;
+    font-size: 1em !important;
+    font-weight: 700 !important;
+    transition: background-color 0.3s ease, transform 0.1s ease !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+.n8n-chat-send-button:hover {
+    background-color: var(--secondary-color) !important;
+}
+
+.n8n-chat-send-button:active {
+    transform: translateY(1px) !important;
+}
+
+/* Indicador de "escribiendo" (si el componente lo genera) */
+.n8n-chat-typing-indicator {
+    background-color: var(--bubble-ai-bg) !important;
+    color: var(--text-color-ai) !important;
+    align-self: flex-start !important;
+    animation: pulse 1.5s infinite !important; /* Reutilizar animación si aplica */
+}
+
+/* Animaciones (si el componente de n8n no las tiene, estas no se aplicarán a menos que lo sobrescribas a fondo) */
+/* Si el componente no tiene clases específicas para los puntos, estas animaciones no harán efecto */
+/* Puedes inspeccionar el DOM del chat n8n para ver las clases exactas del indicador de escritura */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* Responsividad básica */
+@media (max-width: 768px) {
+    .chat-wrapper {
+        height: 100vh;
+        width: 100vw; /* Ocupa todo el ancho en móviles */
+        border-radius: 0; /* Elimina bordes redondeados en móviles */
+    }
+    .chat-header {
+        font-size: 1.4rem;
+        padding: 15px;
+    }
+    .close-btn {
+        font-size: 1.3rem;
+        right: 15px;
+    }
+}

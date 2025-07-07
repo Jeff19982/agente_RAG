@@ -1,0 +1,321 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [240, 280]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "folderId": "ID_DE_TU_CARPETA_DE_GOOGLE_DRIVE",
+        "additionalFields": {},
+        "options": {
+          "fields": "files(id, name, mimeType, modifiedTime, size)"
+        }
+      },
+      "name": "Google Drive: Listar Archivos",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [480, 280],
+      "credentials": {
+        "googleDriveApi": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIALS_ID",
+          "name": "Google Drive Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "value": "={{ $json.id }}",
+        "options": {
+          "outputType": "string",
+          "fieldToUpdate": "fileId",
+          "executeOnce": false
+        }
+      },
+      "name": "Set: ID de Archivo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [640, 280]
+    },
+    {
+      "parameters": {
+        "conditions": [
+          {
+            "type": "string",
+            "property": "mimeType",
+            "operation": "in",
+            "value": [
+              "application/vnd.google-apps.document",
+              "application/vnd.google-apps.spreadsheet",
+              "application/vnd.google-apps.presentation",
+              "text/plain",
+              "application/pdf"
+            ]
+          }
+        ]
+      },
+      "name": "Clasificar por Tipo",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [800, 280]
+    },
+    {
+      "parameters": {
+        "operation": "export",
+        "fileId": "={{ $json.id }}",
+        "mimeType": "text/plain",
+        "additionalFields": {}
+      },
+      "name": "Google Drive: Exportar GDoc/GSheet/GSlide a Texto",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [1000, 180],
+      "credentials": {
+        "googleDriveApi": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIALS_ID",
+          "name": "Google Drive Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $json.id }}",
+        "options": {}
+      },
+      "name": "Google Drive: Descargar PDF/TXT",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [1000, 380],
+      "credentials": {
+        "googleDriveApi": {
+          "id": "YOUR_GOOGLE_DRIVE_CREDENTIALS_ID",
+          "name": "Google Drive Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "content",
+              "value": "={{ $node[\"Google Drive: Exportar GDoc/GSheet/GSlide a Texto\"].binary[\"data\"].toString(\"utf8\") }}"
+            }
+          ]
+        }
+      },
+      "name": "Set: Contenido para Vectorizar (Google Docs)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1200, 180]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "content",
+              "value": "={{ $node[\"Google Drive: Descargar PDF/TXT\"].binary[\"data\"].toString(\"utf8\") }}"
+            }
+          ]
+        }
+      },
+      "name": "Set: Contenido para Vectorizar (PDF/TXT)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1200, 380]
+    },
+    {
+      "parameters": {
+        "url": "TU_ENDPOINT_DE_API_DE_VECTORIZACION",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "bodyContentType": "json"
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.content }}"
+            }
+          ]
+        }
+      },
+      "name": "HTTP Request: Vectorizar Contenido",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [1400, 280]
+    },
+    {
+      "parameters": {
+        "url": "TU_ENDPOINT_DE_DB_VECTORIAL_PARA_GUARDAR",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "bodyContentType": "json"
+        },
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "vector",
+              "value": "={{ $node[\"HTTP Request: Vectorizar Contenido\"].json[\"vector\"] }}"
+            },
+            {
+              "name": "metadata",
+              "value": {
+                "name": "={{ $json.name }}",
+                "mimeType": "={{ $json.mimeType }}",
+                "modifiedTime": "={{ $json.modifiedTime }}",
+                "size": "={{ $json.size }}"
+              }
+            }
+          ]
+        }
+      },
+      "name": "HTTP Request: Guardar en DB Vectorial",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [1600, 280]
+    },
+    {
+      "parameters": {
+        "mode": "everyMinute"
+      },
+      "name": "Cron",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [80, 280]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Google Drive: Listar Archivos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Google Drive: Listar Archivos": {
+      "main": [
+        [
+          {
+            "node": "Set: ID de Archivo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set: ID de Archivo": {
+      "main": [
+        [
+          {
+            "node": "Clasificar por Tipo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Clasificar por Tipo": {
+      "main": [
+        [
+          {
+            "node": "Google Drive: Exportar GDoc/GSheet/GSlide a Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Drive: Descargar PDF/TXT",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Google Drive: Exportar GDoc/GSheet/GSlide a Texto": {
+      "main": [
+        [
+          {
+            "node": "Set: Contenido para Vectorizar (Google Docs)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Google Drive: Descargar PDF/TXT": {
+      "main": [
+        [
+          {
+            "node": "Set: Contenido para Vectorizar (PDF/TXT)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set: Contenido para Vectorizar (Google Docs)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request: Vectorizar Contenido",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Set: Contenido para Vectorizar (PDF/TXT)": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request: Vectorizar Contenido",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "HTTP Request: Vectorizar Contenido": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request: Guardar en DB Vectorial",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Cron": {
+      "main": [
+        [
+          {
+            "node": "Google Drive: Listar Archivos",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "saveDataSuccess": true,
+    "saveDataError": true,
+    "retryFailedTasks": true,
+    "retryOnSpecificCode": true,
+    "maxRetries": 3,
+    "timeout": 3600000,
+    "errorWorkflowId": ""
+  },
+  "id": "google-drive-vectorization-flow"
+}

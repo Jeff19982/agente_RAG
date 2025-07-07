@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de la ESPOCH</title>
+    <link rel="stylesheet" href="/styles.css"
+</head>
+<body>
+
+    <header>
+        
+    <main>
+        
+    </main>
+
+    <footer>
+    </footer>
+
+   <script type="module">
+ import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+ createChat({
+ webhookUrl: 'http://localhost:5678/webhook/55796d5f-a64d-40e0-b614-db9ae5be5d1a/chat',
+ webhookConfig: {
+  method: 'POST',
+  headers: {}
+ },
+ target: '#n8n-chat', // Este es el ID del div donde se inyectará el chat
+ mode: 'window', // Modo de ventana flotante
+ chatInputKey: 'chatInput',
+ chatSessionKey: 'sessionId',
+ metadata: {},
+ showWelcomeScreen: false, // Puedes cambiar a 'true' si prefieres una pantalla de bienvenida.
+ defaultLanguage: 'es', // Establecido a español por defecto
+ initialMessages: [
+  '¡Hola! 👋',
+  'Soy Polito, tu asistente ESPOCH. ¿En qué te puedo ayudar?' // Mensaje inicial optimizado para el espacio
+ ],
+ i18n: {
+  en: { // Configuración en inglés (mantener por si se cambia el idioma)
+   title: 'Hello! 👋',
+   subtitle: "I'm Polito, your ESPOCH assistant. How can I help you?", // Subtítulo acortado para inglés
+   footer: '',
+   getStarted: 'New Conversation',
+   inputPlaceholder: 'Type your question..',
+  },
+  es: { // Configuración para español (la que se usará por defecto)
+   title: '¡Bienvenido! 👋', // Título amigable en español
+   subtitle: "Soy Polito, tu asistente ESPOCH. ¿En qué te puedo ayudar?", // Subtítulo optimizado para el espacio
+   footer: '', // Pie de página, si necesitas algo aquí
+   getStarted: 'Iniciar nueva conversación', // Texto para botón de nueva conversación
+   inputPlaceholder: 'Escribe tu mensaje...', // Texto del placeholder en español
+  },
+ },
+});
+</script>
+
+</body>
+</html>
